@@ -6,17 +6,18 @@ GAME_BOARD = [" \n1 | 2 | 3#{BOARD_WALLS}4 | 5 | 6#{BOARD_WALLS}7 | 8 | 9 \n "].
 
 TOP_ROW = [2, 6, 10]
 MID_ROW = [22, 26, 30]
-RIGHT_ROW = [42, 46, 50]
+BOT_ROW = [42, 46, 50]
 LEFT_COL = [2, 22, 42]
 MID_COL = [6, 26, 46]
 RIGHT_COL = [10, 30, 50]
 CROSS_1 = [2, 26, 50]
 CROSS_2 = [10, 26, 42]
-POSSIBLE_WINS = [TOP_ROW, MID_ROW, RIGHT_ROW, LEFT_COL, MID_COL, RIGHT_COL, CROSS_1, CROSS_2]
+POSSIBLE_WINS = [TOP_ROW, MID_ROW, BOT_ROW, LEFT_COL, MID_COL, RIGHT_COL, CROSS_1, CROSS_2]
+POSSIBLE_WINS_NAMES = ["TOP ROW", "MID ROW", "BOT ROW", "LEFT COL", "MID COL", "RIGHT COL", "CROSS 1", "CROSS 2"]
 
 # A module for checking possible win senarios.
 module BoardCheck
-  def possible_wins
+  def activate_possible_wins
     POSSIBLE_WINS.each { |beam| (beam.map! { |i| board[0][i] }) }
   end
 
@@ -25,24 +26,35 @@ module BoardCheck
       index_to_change = beam.index(choice.to_s)
       if index_to_change != nil
         beam[index_to_change] = symbol
+        POSSIBLE_WINS.index(beam)
       end
     end
-    p POSSIBLE_WINS
   end
 
   def any_possible_wins?(symbol)
-    p POSSIBLE_WINS.one?([symbol, symbol, symbol]) ? true : false
-    p POSSIBLE_WINS.each do |beam|
-      if beam == [[symbol, symbol, symbol]]
-        p POSSIBLE_WINS.index(beam)
+    # p POSSIBLE_WINS.one?([symbol, symbol, symbol]) ? true : false
+    POSSIBLE_WINS.each do |beam|
+      if beam == [symbol, symbol, symbol]
+        win_index = POSSIBLE_WINS.index(beam)
+        win_place = POSSIBLE_WINS_NAMES[win_index]
+        declare_winner(symbol, win_place)
+      else
+        false
       end
     end
   end
 
-  def board_check_for(symbol)
-    POSSIBLE_WINS.each do |beam|
-      beam == [symbol, symbol, symbol]
+  def declare_winner(symbol, win_place)
+    if symbol == "X"
+      puts "\n● #{win_place} is done!\n\n▷ #{p1.upcase} is the winner!\n"
+    elsif symbol == "O"
+      puts "\n● #{win_place} is done!\n\n▷ #{p2.upcase} is the winner!\n"
     end
+    @is_on = false
+  end
+
+  def no_winner
+    puts "None beats the other."
   end
 end
 
@@ -73,13 +85,22 @@ class TikTacToe
   include GameMethods
   include BoardCheck
 
-  attr_accessor :board, :p1, :p2
+  attr_accessor :board, :p1, :p2, :is_on
 
   def initialize(first_player, second_player)
     @p1 = first_player
     @p2 = second_player
+    @is_on = true
     @board = GAME_BOARD
-    possible_wins
+    activate_possible_wins
+  end
+
+  def player1?
+    any_possible_wins?('x')
+  end
+
+  def player2?
+    any_possible_wins?('O')
   end
 
   def player1(choice)
@@ -104,10 +125,26 @@ class TikTacToe
   end
 end
 
-game = TikTacToe.new('abc', 'cef')
-puts game.player1(1)
-puts game.player1(4)
-puts game.player1(7)
-puts game.player2(7)
+# I have to find a way to make below codes a better block of code.
+# Just need game to repeat itself, works perfecly fine tho.
 
-# puts game.position_check(4,"X")
+puts "Game is on :)\n\n"
+puts "▼ Enter player 1 name: "
+name1 = gets.chomp
+puts "▼ Enter player 2 name: "
+name2 = gets.chomp
+game = TikTacToe.new(name1, name2)
+puts game.board
+
+while game.is_on
+  puts "#{name1} where do you wanna place your sign 'X': "
+  p1_move = gets.chomp
+  puts game.player1(p1_move)
+  if game.is_on
+    puts "#{name2} where do you wanna place your sign 'O': "
+    p2_move = gets.chomp
+    puts game.player2(p2_move)
+  else
+    puts "Game over!"
+  end
+end
