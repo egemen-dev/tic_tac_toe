@@ -11,7 +11,7 @@ RIGHT_COL = [10, 30, 50]
 CROSS_1 = [2, 26, 50]
 CROSS_2 = [10, 26, 42]
 POSSIBLE_WINS = [TOP_ROW, MID_ROW, BOT_ROW, LEFT_COL, MID_COL, RIGHT_COL, CROSS_1, CROSS_2]
-POSSIBLE_WINS_NAMES = ["TOP ROW", "MID ROW", "BOT ROW", "LEFT COL", "MID COL", "RIGHT COL", "CROSS 1", "CROSS 2"]
+POSSIBLE_WINS_NAMES = ['TOP ROW', 'MID ROW', 'BOT ROW', 'LEFT COL', 'MID COL', 'RIGHT COL', 'CROSS 1', 'CROSS 2']
 
 # A module for checking possible win scenarios.
 module WinCheckMethods
@@ -24,7 +24,7 @@ module WinCheckMethods
   def update(choice, symbol)
     POSSIBLE_WINS.each do |beam|
       index_to_change = beam.index(choice.to_s)
-      if index_to_change != nil
+      unless index_to_change.nil?
         beam[index_to_change] = symbol
         POSSIBLE_WINS.index(beam)
       end
@@ -33,18 +33,18 @@ module WinCheckMethods
 
   def any_possible_wins?(symbol)
     POSSIBLE_WINS.each do |beam|
-      if beam == [symbol, symbol, symbol]
-        win_index = POSSIBLE_WINS.index(beam)
-        win_place = POSSIBLE_WINS_NAMES[win_index]
-        declare_winner(symbol, win_place)
-      end
+      next unless beam == [symbol, symbol, symbol]
+
+      win_index = POSSIBLE_WINS.index(beam)
+      win_place = POSSIBLE_WINS_NAMES[win_index]
+      declare_winner(symbol, win_place)
     end
   end
 
   def declare_winner(symbol, win_place)
-    if symbol == "X"
+    if symbol == 'X'
       puts "\n● #{win_place} is done!\n\n▷ #{p1.upcase} is the winner!\n"
-    elsif symbol == "O"
+    elsif symbol == 'O'
       puts "\n● #{win_place} is done!\n\n▷ #{p2.upcase} is the winner!\n"
     end
     @is_on = false
