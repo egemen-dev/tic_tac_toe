@@ -1,4 +1,4 @@
-module TikTacToe
+module TicTacToe
   # Game board and its methods.
   class Board
     attr_accessor :cells, :is_on
@@ -105,7 +105,7 @@ end
 
 # Main logic, makes the game playable.
 def play_now
-  include TikTacToe
+  include TicTacToe
   puts '▼ Enter your name: '
   name = gets.chomp
   game = Game.new(name)
