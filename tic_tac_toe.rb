@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 BOARD_WALLS = "\n--+---+--\n"
 NONNUMERICAL = ['', '+', '-', ' '].freeze
 GAME_BOARD = [" \n1 | 2 | 3#{BOARD_WALLS}4 | 5 | 6#{BOARD_WALLS}7 | 8 | 9 \n "].freeze
