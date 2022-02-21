@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TicTacToe
   # Game board and its methods.
   class Board
@@ -16,7 +18,7 @@ module TicTacToe
     end
 
     def available
-      available = cells.select { |i| i.instance_of?(Integer) }
+      cells.select { |i| i.instance_of?(Integer) }
     end
 
     def show
@@ -44,7 +46,7 @@ module TicTacToe
         scenario[1] == num ? scenario[1] = symbol : scenario[1]
         scenario[2] == num ? scenario[2] = symbol : scenario[2]
       end
-      p POSSIBLE_WINS
+      POSSIBLE_WINS
     end
 
     def win?(symbol)
@@ -65,6 +67,27 @@ module TicTacToe
     def on?
       !full? && no_wins? ? true : false
     end
+
+    # AI evaluates the possibilities of you winning and acts accordingly.
+    def ai_select
+      x_x = POSSIBLE_WINS.select { |i| i.count('X') == 2 && !i.include?('O') }
+      o_o = POSSIBLE_WINS.select { |i| i.count('O') == 2 && !i.include?('X') }
+      one_x = POSSIBLE_WINS.select { |i| i.count('X') == 1 && !i.include?('O') }
+      one_o = POSSIBLE_WINS.select { |i| i.count('O') == 1 }
+      no_x = POSSIBLE_WINS.reject { |i| i.include?('X') }
+      no_o = POSSIBLE_WINS.reject { |i| i.include?('O') }
+
+      if x_x.length >= 1
+        options = x_x.sample.select { |i| i.instance_of?(Integer) }
+      elsif one_x.length >= 1
+        options = one_x.sample.select { |i| i.instance_of?(Integer) }
+      elsif o_o >= 1
+        options = o_o.sample.select { |i| i.instance_of?(Integer) }
+      else
+        options = no_x.sample.select { |i| i.instance_of?(Integer) }
+      end
+      options.sample
+    end
   end
 
   # Creation of the player and computer with game-play methods.
@@ -81,7 +104,8 @@ module TicTacToe
 
     def computer_play
       if board.on?
-        selection = board.available.sample
+        # selection = board.available.sample
+        selection = ai_select
         board.move(selection, computer_symbol)
         board.update(selection, computer_symbol)
         puts "#{computer_name} played for #{selection}"
