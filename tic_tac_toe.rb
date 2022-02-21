@@ -1,17 +1,19 @@
+# frozen_string_literal: true
+
 BOARD_WALLS = "\n--+---+--\n"
 NONNUMERICAL = ['', '+', '-', ' '].freeze
-GAME_BOARD = [" \n1 | 2 | 3#{BOARD_WALLS}4 | 5 | 6#{BOARD_WALLS}7 | 8 | 9 \n "]
+GAME_BOARD = [" \n1 | 2 | 3#{BOARD_WALLS}4 | 5 | 6#{BOARD_WALLS}7 | 8 | 9 \n "].freeze
 
-TOP_ROW = [2, 6, 10]
-MID_ROW = [22, 26, 30]
-BOT_ROW = [42, 46, 50]
-LEFT_COL = [2, 22, 42]
-MID_COL = [6, 26, 46]
-RIGHT_COL = [10, 30, 50]
-CROSS_1 = [2, 26, 50]
-CROSS_2 = [10, 26, 42]
-POSSIBLE_WINS = [TOP_ROW, MID_ROW, BOT_ROW, LEFT_COL, MID_COL, RIGHT_COL, CROSS_1, CROSS_2]
-POSSIBLE_WINS_NAMES = ['TOP ROW', 'MID ROW', 'BOT ROW', 'LEFT COL', 'MID COL', 'RIGHT COL', 'CROSS 1', 'CROSS 2']
+TOP_ROW = [2, 6, 10].freeze
+MID_ROW = [22, 26, 30].freeze
+BOT_ROW = [42, 46, 50].freeze
+LEFT_COL = [2, 22, 42].freeze
+MID_COL = [6, 26, 46].freeze
+RIGHT_COL = [10, 30, 50].freeze
+CROSS_1 = [2, 26, 50].freeze
+CROSS_2 = [10, 26, 42].freeze
+POSSIBLE_WINS = [TOP_ROW, MID_ROW, BOT_ROW, LEFT_COL, MID_COL, RIGHT_COL, CROSS_1, CROSS_2].freeze
+POSSIBLE_WINS_NAMES = ['TOP ROW', 'MID ROW', 'BOT ROW', 'LEFT COL', 'MID COL', 'RIGHT COL', 'CROSS 1', 'CROSS 2'].freeze
 
 # A module for checking possible win scenarios.
 module WinCheckMethods
@@ -42,9 +44,10 @@ module WinCheckMethods
   end
 
   def declare_winner(symbol, win_place)
-    if symbol == 'X'
+    case symbol
+    when 'X'
       puts "\n● #{win_place} is done!\n\n▷ #{p1.upcase} is the winner!\n"
-    elsif symbol == 'O'
+    when 'O'
       puts "\n● #{win_place} is done!\n\n▷ #{p2.upcase} is the winner!\n"
     end
     @is_on = false

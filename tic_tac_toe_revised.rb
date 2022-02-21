@@ -104,7 +104,6 @@ module TicTacToe
 
     def computer_play
       if board.on?
-        # selection = board.available.sample
         selection = ai_select
         board.move(selection, computer_symbol)
         board.update(selection, computer_symbol)
